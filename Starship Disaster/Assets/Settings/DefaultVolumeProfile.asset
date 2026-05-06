@@ -107,6 +107,68 @@ MonoBehaviour:
   clamp:
     m_OverrideState: 1
     m_Value: 0.05
+--- !u!114 &-7439564745584625457
+MonoBehaviour:
+  m_ObjectHideFlags: 3
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 32eb3b8fb939d9b41b04b5621e6d36dd, type: 3}
+  m_Name: Fog
+  m_EditorClassIdentifier: Assembly-CSharp::PSX.Fog
+  active: 1
+  <displayName>k__BackingField: 
+  fogDensity:
+    <fieldHash>k__BackingField: -593663600
+    m_OverrideState: 1
+    m_Value: 1
+  fogDistance:
+    <fieldHash>k__BackingField: -354313208
+    m_OverrideState: 1
+    m_Value: 10
+  fogColor:
+    <fieldHash>k__BackingField: -114962816
+    m_OverrideState: 1
+    m_Value:
+      r: 0.38679248
+      g: 0.31928626
+      b: 0.31928626
+      a: 1
+  ambientColor:
+    <fieldHash>k__BackingField: 124387576
+    m_OverrideState: 1
+    m_Value:
+      r: 0.1
+      g: 0.1
+      b: 0.1
+      a: 0.1
+  fogNear:
+    <fieldHash>k__BackingField: 363737968
+    m_OverrideState: 1
+    m_Value: 1
+  fogFar:
+    <fieldHash>k__BackingField: 603088360
+    m_OverrideState: 1
+    m_Value: 100
+  fogAltScale:
+    <fieldHash>k__BackingField: 842438752
+    m_OverrideState: 1
+    m_Value: 10
+  fogThinning:
+    <fieldHash>k__BackingField: 1081789144
+    m_OverrideState: 1
+    m_Value: 100
+  noiseScale:
+    <fieldHash>k__BackingField: 1321139536
+    m_OverrideState: 1
+    m_Value: 100
+  noiseStrength:
+    <fieldHash>k__BackingField: 1560489928
+    m_OverrideState: 1
+    m_Value: 0.05
 --- !u!114 &-7274224791359825572
 MonoBehaviour:
   m_ObjectHideFlags: 3
@@ -280,6 +342,36 @@ MonoBehaviour:
   SunScatteringIntensity:
     m_OverrideState: 1
     m_Value: 2
+--- !u!114 &-4549680498522963983
+MonoBehaviour:
+  m_ObjectHideFlags: 3
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5ea62842ddb6960488930897ba9ce398, type: 3}
+  m_Name: Dithering
+  m_EditorClassIdentifier: Assembly-CSharp::PSX.Dithering
+  active: 1
+  <displayName>k__BackingField: 
+  patternIndex:
+    <fieldHash>k__BackingField: -303883480
+    m_OverrideState: 1
+    m_Value: 0
+  ditherThreshold:
+    <fieldHash>k__BackingField: 174817304
+    m_OverrideState: 1
+    m_Value: 512
+  ditherStrength:
+    <fieldHash>k__BackingField: 653518088
+    m_OverrideState: 1
+    m_Value: 1
+  ditherScale:
+    <fieldHash>k__BackingField: 1132218872
+    m_OverrideState: 1
+    m_Value: 2
 --- !u!114 &-4463884970436517307
 MonoBehaviour:
   m_ObjectHideFlags: 3
@@ -377,6 +469,9 @@ MonoBehaviour:
     m_OverrideState: 1
     m_Value: {r: 1, g: 1, b: 1, a: 1}
   highQualityFiltering:
+    m_OverrideState: 1
+    m_Value: 0
+  filter:
     m_OverrideState: 1
     m_Value: 0
   downscale:
@@ -566,6 +661,32 @@ MonoBehaviour:
   highlightsEnd:
     m_OverrideState: 1
     m_Value: 1
+--- !u!114 &1413595677592495212
+MonoBehaviour:
+  m_ObjectHideFlags: 3
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 35a1bd58dd7548198609eabd8ae2bb7d, type: 3}
+  m_Name: Pixelation
+  m_EditorClassIdentifier: Assembly-CSharp::PSX.Pixelation
+  active: 1
+  <displayName>k__BackingField: 
+  widthPixelation:
+    <fieldHash>k__BackingField: -1457944280
+    m_OverrideState: 1
+    m_Value: 320
+  heightPixelation:
+    <fieldHash>k__BackingField: -1218593888
+    m_OverrideState: 1
+    m_Value: 240
+  colorPrecision:
+    <fieldHash>k__BackingField: -979243496
+    m_OverrideState: 1
+    m_Value: 16
 --- !u!114 &1666464333004379222
 MonoBehaviour:
   m_ObjectHideFlags: 3
@@ -922,6 +1043,108 @@ MonoBehaviour:
   scale:
     m_OverrideState: 1
     m_Value: 1
+--- !u!114 &7677928820855798240
+MonoBehaviour:
+  m_ObjectHideFlags: 3
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4265a041954897941afec871c608473b, type: 3}
+  m_Name: Crt
+  m_EditorClassIdentifier: Assembly-CSharp::Crt
+  active: 1
+  <displayName>k__BackingField: 
+  scanlinesWeight:
+    <fieldHash>k__BackingField: -424309680
+    m_OverrideState: 1
+    m_Value: 1
+  noiseWeight:
+    <fieldHash>k__BackingField: -184959288
+    m_OverrideState: 1
+    m_Value: 1
+  screenBendX:
+    <fieldHash>k__BackingField: 54391104
+    m_OverrideState: 1
+    m_Value: 50
+  screenBendY:
+    <fieldHash>k__BackingField: 293741496
+    m_OverrideState: 1
+    m_Value: 30
+  vignetteAmount:
+    <fieldHash>k__BackingField: 533091888
+    m_OverrideState: 1
+    m_Value: 0
+  vignetteSize:
+    <fieldHash>k__BackingField: 772442280
+    m_OverrideState: 1
+    m_Value: 2
+  vignetteRounding:
+    <fieldHash>k__BackingField: 1011792672
+    m_OverrideState: 1
+    m_Value: 2
+  vignetteSmoothing:
+    <fieldHash>k__BackingField: 1251143064
+    m_OverrideState: 1
+    m_Value: 1
+  scanlinesDensity:
+    <fieldHash>k__BackingField: 1490493456
+    m_OverrideState: 1
+    m_Value: 200
+  scanlinesSpeed:
+    <fieldHash>k__BackingField: 1729843848
+    m_OverrideState: 1
+    m_Value: -10
+  noiseAmount:
+    <fieldHash>k__BackingField: 1969194240
+    m_OverrideState: 1
+    m_Value: 250
+  chromaticRed:
+    <fieldHash>k__BackingField: -2086422664
+    m_OverrideState: 1
+    m_Value: {x: 0, y: 0}
+  chromaticGreen:
+    <fieldHash>k__BackingField: -1847072272
+    m_OverrideState: 1
+    m_Value: {x: 0, y: 0}
+  chromaticBlue:
+    <fieldHash>k__BackingField: -1607721880
+    m_OverrideState: 1
+    m_Value: {x: 0, y: 0}
+  grilleOpacity:
+    <fieldHash>k__BackingField: -1129021096
+    m_OverrideState: 1
+    m_Value: 0.4
+  grilleCounterOpacity:
+    <fieldHash>k__BackingField: -889670704
+    m_OverrideState: 1
+    m_Value: 0.2
+  grilleResolution:
+    <fieldHash>k__BackingField: -650320312
+    m_OverrideState: 1
+    m_Value: 360
+  grilleCounterResolution:
+    <fieldHash>k__BackingField: -410969920
+    m_OverrideState: 1
+    m_Value: 540
+  grilleUvRotation:
+    <fieldHash>k__BackingField: 67730864
+    m_OverrideState: 1
+    m_Value: 90
+  grilleBrightness:
+    <fieldHash>k__BackingField: 307081256
+    m_OverrideState: 1
+    m_Value: 15
+  grilleUvMidPoint:
+    <fieldHash>k__BackingField: 546431648
+    m_OverrideState: 1
+    m_Value: 0.5
+  grilleShift:
+    <fieldHash>k__BackingField: 785782040
+    m_OverrideState: 1
+    m_Value: {x: 1, y: 1, z: 1}
 --- !u!114 &9001657382290151224
 MonoBehaviour:
   m_ObjectHideFlags: 3
