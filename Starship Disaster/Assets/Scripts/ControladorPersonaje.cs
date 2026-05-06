@@ -4,28 +4,34 @@ using UnityEngine.InputSystem;
 [RequireComponent(typeof(CharacterController))]
 public class ControladorPersonaje : MonoBehaviour
 {
-    // --- Variables de configuración ---
+    [Header("Velocidades")]
     public float velocidadCaminar = 5f;
     public float velocidadCorrer = 10f;
     public float velocidadAgachado = 2.5f;
 
+    [Header("Alturas y Agacharse")]
     public float alturaNormal = 2f;
     public float alturaAgachado = 1f;
-
-    // --- NUEVO: Control de la cámara al agacharse ---
     public float alturaCamaraNormal = 0.8f;
     public float alturaCamaraAgachado = 0.2f;
 
-    // --- Referencias ---
+    [Header("Físicas")]
+    public float gravedad = -9.81f;
+    private Vector3 velocidadCaida;
+
+    [Header("Referencias")]
     public Transform orientation;
-    public Transform cameraPos; // ¡NUEVO! Referencia para mover los ojos
+    public Transform cameraPos;
 
     private CharacterController controller;
+    private Animator anim;
     private InputSystem_Actions _input;
 
     private void Awake()
     {
         controller = GetComponent<CharacterController>();
+        // Buscamos el Animator en el modelo 3D que es hijo de este objeto
+        anim = GetComponentInChildren<Animator>();
         _input = new InputSystem_Actions();
     }
 
@@ -35,47 +41,74 @@ public class ControladorPersonaje : MonoBehaviour
     private void Update()
     {
         GestionarMovimiento();
-        // GestionarInteraccion(); (Lo oculto por brevedad)
+        GestionarInteraccion();
     }
 
     private void GestionarMovimiento()
     {
+        // 1. LECTURA DE INPUTS
         Vector2 inputMovimiento = _input.Player.Move.ReadValue<Vector2>();
         bool estaCorriendo = _input.Player.Sprint.IsPressed();
         bool estaAgachado = _input.Player.Crouch.IsPressed();
 
+        // 2. LÓGICA DE ESTADOS (Agacharse y Velocidad)
         float velocidadActual = velocidadCaminar;
 
         if (estaAgachado)
         {
             velocidadActual = velocidadAgachado;
-
-            // 1. Encogemos la cápsula
+            // Encogemos la cápsula y bajamos la cámara
             controller.height = alturaAgachado;
-            // 2. Bajamos el centro para que los pies sigan tocando el suelo
             controller.center = new Vector3(0, -0.5f, 0);
-            // 3. Bajamos la cámara
             cameraPos.localPosition = new Vector3(0, alturaCamaraAgachado, 0);
         }
         else
         {
-            // 1. Restauramos la cápsula
+            // Restauramos los valores de estar de pie
             controller.height = alturaNormal;
-            // 2. Restauramos el centro (normalmente 0,0,0)
             controller.center = new Vector3(0, 0, 0);
-            // 3. Restauramos la cámara
             cameraPos.localPosition = new Vector3(0, alturaCamaraNormal, 0);
 
+            // Solo podemos correr si no estamos agachados
             if (estaCorriendo)
             {
                 velocidadActual = velocidadCorrer;
             }
         }
 
-        Vector3 movimiento = orientation.right * inputMovimiento.x + orientation.forward * inputMovimiento.y;
+        // 3. APLICAR ANIMACIONES AL MODELO 3D
+        // Calculamos a qué velocidad se está moviendo realmente
+        float velocidadParaAnimacion = inputMovimiento.magnitude * velocidadActual;
 
-        // Aquí suele faltar la gravedad en un controlador básico. 
-        // Si no tienes gravedad, al bajar escaleras flotarás.
+        // Si soltamos las teclas, forzamos a 0 para que pase al estado Idle
+        if (inputMovimiento.magnitude == 0) velocidadParaAnimacion = 0;
+
+        if (anim != null)
+        {
+            anim.SetFloat("Velocidad", velocidadParaAnimacion);
+        }
+
+        // 4. MOVIMIENTO FÍSICO
+        // Caminar en base a donde apunta la cámara (Orientation)
+        Vector3 movimiento = orientation.right * inputMovimiento.x + orientation.forward * inputMovimiento.y;
         controller.Move(movimiento * velocidadActual * Time.deltaTime);
+
+        // 5. GRAVEDAD
+        // Si estamos tocando el suelo, reiniciamos la fuerza de caída
+        if (controller.isGrounded && velocidadCaida.y < 0)
+        {
+            velocidadCaida.y = -2f; // Un pequeño empujón extra para que se pegue bien al suelo
+        }
+        // Aplicamos la aceleración de la gravedad constante
+        velocidadCaida.y += gravedad * Time.deltaTime;
+        controller.Move(velocidadCaida * Time.deltaTime);
+    }
+
+    private void GestionarInteraccion()
+    {
+        if (_input.Player.Interact.WasPressedThisFrame())
+        {
+            Debug.Log("¡Has pulsado el botón de interactuar!");
+        }
     }
 }
