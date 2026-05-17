@@ -20,7 +20,7 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: PruebaShader
+  m_Name: ShaderCientifico
   m_Shader: {fileID: -6465566751694194690, guid: b2426989076c2db4398b803a9dd4b4fd, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
