@@ -8,15 +8,20 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using System;
+using Assets._Scripts;
+
+
 
 #if UNITY_EDITOR
-    using UnityEditor;
+using UnityEditor;
     using System.Net;
 #endif
 
 public class FirstPersonController : MonoBehaviour
 {
     private Rigidbody rb;
+    private PasosBehavior pasos;
 
     #region Camera Movement Variables
 
@@ -134,6 +139,7 @@ public class FirstPersonController : MonoBehaviour
     private void Awake()
     {
         rb = GetComponent<Rigidbody>();
+        pasos = GetComponent<PasosBehavior>();
 
         crosshairObject = GetComponentInChildren<Image>();
 
@@ -163,7 +169,7 @@ public class FirstPersonController : MonoBehaviour
         }
         else
         {
-            crosshairObject.gameObject.SetActive(false);
+            //crosshairObject.gameObject.SetActive(false);
         }
 
         #region Sprint Bar
@@ -517,7 +523,14 @@ public class FirstPersonController : MonoBehaviour
                 timer += Time.deltaTime * bobSpeed;
             }
             // Applies HeadBob movement
-            joint.localPosition = new Vector3(jointOriginalPos.x + Mathf.Sin(timer) * bobAmount.x, jointOriginalPos.y + Mathf.Sin(timer) * bobAmount.y, jointOriginalPos.z + Mathf.Sin(timer) * bobAmount.z);
+            Vector3 vector3 = new Vector3(jointOriginalPos.x + Mathf.Sin(timer) * bobAmount.x, jointOriginalPos.y + Mathf.Sin(timer) * bobAmount.y, jointOriginalPos.z + Mathf.Sin(timer) * bobAmount.z);
+            joint.localPosition = vector3;
+            // Detecta que ha dado un paso
+            if (Mathf.Sin(timer) < 0.0001 && !isCrouched)
+            { 
+                //Debug.Log("paso");
+                pasos.FootStep();
+            }
         }
         else
         {
