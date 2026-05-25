@@ -3,41 +3,44 @@ using UnityEngine;
 public class MensajeObjeto : MonoBehaviour
 {
     [Header("Configuración")]
-    public GameObject mensajeUI;      // Arrastra aquí el texto "Pulse E..." del Canvas
-    public Transform jugador;         // Arrastra aquí a tu personaje para medir la distancia
-    public float distanciaMaxima = 3.5f; // Distancia para que aparezca el mensaje
+    public GameObject mensajeUI;
+    public float distanciaMaxima = 3.5f;
 
-    // Esta función la llama Unity automáticamente MIENTRAS estés mirando el objeto
-    private void OnMouseOver()
+    private Camera camaraPrincipal;
+
+    void Start()
     {
-        // Calculamos a qué distancia está el jugador de la puerta
-        float distancia = Vector3.Distance(transform.position, jugador.position);
+        // El script busca automáticamente la cámara del jugador al empezar
+        camaraPrincipal = Camera.main;
 
-        if (distancia <= distanciaMaxima)
-        {
-            // Si lo miras y estás cerca, enciende el texto
-            if (mensajeUI != null) mensajeUI.SetActive(true);
-        }
-        else
-        {
-            // Si lo miras pero estás muy lejos, lo apaga
-            if (mensajeUI != null) mensajeUI.SetActive(false);
-        }
-    }
-
-    // Esta función la llama Unity en el milisegundo en que DEJAS de mirar el objeto
-    private void OnMouseExit()
-    {
         if (mensajeUI != null) mensajeUI.SetActive(false);
     }
 
-    // Esta función la llama Unity automáticamente justo antes de destruir el objeto
+    void Update()
+    {
+        // 1. Trazamos una línea matemática desde la cámara hacia el frente
+        Ray rayo = new Ray(camaraPrincipal.transform.position, camaraPrincipal.transform.forward);
+        RaycastHit hit;
+
+        // 2. Comprobamos si esa línea choca con algo físico
+        if (Physics.Raycast(rayo, out hit, distanciaMaxima))
+        {
+            // 3. ¿El objeto contra el que ha chocado soy YO (este mismo objeto)?
+            if (hit.collider.gameObject == gameObject)
+            {
+                // ¡Me están mirando! Enciendo el texto
+                if (mensajeUI != null) mensajeUI.SetActive(true);
+                return; // Cortamos aquí para que no llegue al código de apagar
+            }
+        }
+
+        // Si la línea no choca con nada, o choca con la pared/otro objeto, me apago
+        if (mensajeUI != null) mensajeUI.SetActive(false);
+    }
+
+    // Mantenemos esto para evitar el bug fantasma al destruir llaves
     private void OnDestroy()
     {
-        // Nos aseguramos de apagar la luz (el texto) antes de irnos
-        if (mensajeUI != null)
-        {
-            mensajeUI.SetActive(false);
-        }
+        if (mensajeUI != null) mensajeUI.SetActive(false);
     }
 }

@@ -1,22 +1,34 @@
 using UnityEngine;
-using UnityEngine.SceneManagement; // ¡Línea vital para poder cambiar de escena!
+using UnityEngine.SceneManagement; // Necesario para cambiar de escena
 
-public class ZonaEscape : MonoBehaviour
+public class PuertaFinalVictoria : MonoBehaviour
 {
-    [Header("Configuración del Destino")]
-    [Tooltip("El nombre exacto de tu escena de victoria tal y como está guardada (ej: 'EscenaVictoria')")]
+    [Header("Configuración")]
+    [Tooltip("El nombre exacto de la escena de victoria en tu carpeta de Assets")]
     public string nombreEscenaVictoria = "Victoria";
 
-    // Esta función la ejecuta Unity automáticamente cuando algo físico atraviesa el Trigger
-    private void OnTriggerEnter(Collider other)
-    {
-        // Comprobamos si lo que ha cruzado es el jugador mirando su etiqueta (Tag)
-        if (other.CompareTag("Player"))
-        {
-            Debug.Log("¡Nave evacuada con éxito! Cargando victoria...");
+    private DoorStatus doorStatus;
 
-            // Le decimos a Unity que cierre el mapa actual y abra la pantalla de victoria
-            SceneManager.LoadScene(nombreEscenaVictoria);
+    void Start()
+    {
+        // Buscamos automáticamente el componente DoorStatus que está en esta misma puerta
+        doorStatus = GetComponent<DoorStatus>();
+
+        if (doorStatus != null)
+        {
+            // Nos conectamos al evento "Opened".
+            // En cuanto la puerta termine de abrirse, ejecutará automáticamente nuestra función GanarJuego
+            doorStatus.Opened.AddListener(GanarJuego);
         }
+        else
+        {
+            Debug.LogError("¡Error! Este script necesita estar en el mismo objeto que el componente DoorStatus.");
+        }
+    }
+
+    void GanarJuego()
+    {
+        Debug.Log("¡Puerta final abierta por completo! Cargando pantalla de victoria...");
+        SceneManager.LoadScene(nombreEscenaVictoria);
     }
 }
