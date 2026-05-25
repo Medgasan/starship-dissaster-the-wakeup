@@ -18,7 +18,6 @@ public class PuertaBehavior : MonoBehaviour, IInteractable
             gameTimer = GetComponent<GameTimer>();
             gameTimer.OneShot = true;
             gameTimer.onTimeout.AddListener(() => Interact());
-
             doorStatus.Opened.AddListener(() => DoorStatusIsOpened());
             doorStatus.Closed.AddListener(() => DoorStatusIsClosed());
         }
@@ -44,6 +43,7 @@ public class PuertaBehavior : MonoBehaviour, IInteractable
     private void DoorStatusIsClosed()
     {
         Debug.Log("DoorStatusIsClosed event");
+        gameTimer.Stop();
     }
 
 }

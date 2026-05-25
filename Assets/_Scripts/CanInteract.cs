@@ -13,13 +13,15 @@ namespace Assets._Scripts
         [Tooltip("Capa (Layer) donde están los objetos interactuables para optimizar el Raycast.")]
         public LayerMask capaInteractuables;
 
+        public Camera camara;
+
         // Ya no necesitamos almacenar el objeto en un Trigger, lo buscamos en tiempo real
         void Update()
         {
             // Lanzamos el rayo hacia adelante desde la posición del jugador/cámara
             // Si estás en 1ª persona, usa la posición de la cámara principal. Si es 3ª persona, el transform del jugador funciona.
-            Vector3 origen = transform.position;
-            Vector3 direccion = transform.forward;
+            Vector3 origen = camara.transform.position;
+            Vector3 direccion = camara.transform.forward;
 
             // Creamos una variable para almacenar la información del impacto
             RaycastHit hit;
@@ -45,7 +47,7 @@ namespace Assets._Scripts
         private void OnDrawGizmos()
         {
             Gizmos.color = Color.red;
-            Gizmos.DrawRay(transform.position, transform.forward * distanciaInteraccion);
+            Gizmos.DrawRay(camara.transform.position, camara.transform.forward * distanciaInteraccion);
         }
 
 

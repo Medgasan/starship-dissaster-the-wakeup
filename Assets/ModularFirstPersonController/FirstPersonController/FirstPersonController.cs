@@ -526,7 +526,7 @@ public class FirstPersonController : MonoBehaviour
             Vector3 vector3 = new Vector3(jointOriginalPos.x + Mathf.Sin(timer) * bobAmount.x, jointOriginalPos.y + Mathf.Sin(timer) * bobAmount.y, jointOriginalPos.z + Mathf.Sin(timer) * bobAmount.z);
             joint.localPosition = vector3;
             // Detecta que ha dado un paso
-            if (Mathf.Sin(timer) < 0.0001 && !isCrouched)
+            if (Mathf.Sin(timer) < -0.99 && !isCrouched)
             { 
                 //Debug.Log("paso");
                 pasos.FootStep();

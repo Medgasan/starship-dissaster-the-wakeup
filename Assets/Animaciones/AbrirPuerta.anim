@@ -182,14 +182,14 @@ AnimationClip:
     floatParameter: 0
     intParameter: 0
     messageOptions: 0
-  - time: 0
+  - time: 0.016666668
     functionName: Play
     data: 
     objectReferenceParameter: {fileID: 0}
     floatParameter: 0
     intParameter: 0
     messageOptions: 0
-  - time: 3.9833333
+  - time: 3.9666667
     functionName: Play
     data: 
     objectReferenceParameter: {fileID: 0}
