@@ -1,55 +1,46 @@
 ﻿using Assets._Scripts.Interfaces;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace Assets._Scripts
 {
     public class CanInteract : MonoBehaviour
     {
-
         [Header("Configuración del Raycast")]
-        [Tooltip("Distancia máxima a la que el jugador puede alcanzar los objetos.")]
         public float distanciaInteraccion = 3.0f;
-
-        [Tooltip("Capa (Layer) donde están los objetos interactuables para optimizar el Raycast.")]
         public LayerMask capaInteractuables;
-
         public Camera camara;
 
-        // Ya no necesitamos almacenar el objeto en un Trigger, lo buscamos en tiempo real
+        [Header("Inventario del Jugador")]
+        [Tooltip("Escribe aquí los nombres de los objetos que el jugador ya tiene (ej: 'TarjetaRoja')")]
+        public List<string> objetosRecogidos = new List<string>();
+
         void Update()
         {
-            // Lanzamos el rayo hacia adelante desde la posición del jugador/cámara
-            // Si estás en 1ª persona, usa la posición de la cámara principal. Si es 3ª persona, el transform del jugador funciona.
             Vector3 origen = camara.transform.position;
             Vector3 direccion = camara.transform.forward;
-
-            // Creamos una variable para almacenar la información del impacto
             RaycastHit hit;
 
-            // Lanzamos el rayo físico
             if (Physics.Raycast(origen, direccion, out hit, distanciaInteraccion, capaInteractuables))
             {
-                // Si lo que golpea el rayo tiene la interfaz...
                 if (hit.collider.TryGetComponent<IInteractable>(out IInteractable interactable))
                 {
-                    // Mostramos el mensaje (puedes conectarlo a tu UI)
-                    // Debug.Log("Presiona 'E' para interactuar con: " + hit.collider.name);
-
                     if (Input.GetKeyDown(KeyCode.E))
                     {
-                        interactable.Interact();
+                        // EL CAMBIO CLAVE: Le pasamos 'this' (este script entero) a la puerta
+                        interactable.Interact(this);
                     }
                 }
             }
         }
 
-        // Dibuja el rayo en la ventana de Escena para que puedas calibrar la distancia visualmente
         private void OnDrawGizmos()
         {
-            Gizmos.color = Color.red;
-            Gizmos.DrawRay(camara.transform.position, camara.transform.forward * distanciaInteraccion);
+            if (camara != null)
+            {
+                Gizmos.color = Color.red;
+                Gizmos.DrawRay(camara.transform.position, camara.transform.forward * distanciaInteraccion);
+            }
         }
-
-
     }
 }

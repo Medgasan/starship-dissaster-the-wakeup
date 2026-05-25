@@ -30,4 +30,14 @@ public class MensajeObjeto : MonoBehaviour
     {
         if (mensajeUI != null) mensajeUI.SetActive(false);
     }
+
+    // Esta función la llama Unity automáticamente justo antes de destruir el objeto
+    private void OnDestroy()
+    {
+        // Nos aseguramos de apagar la luz (el texto) antes de irnos
+        if (mensajeUI != null)
+        {
+            mensajeUI.SetActive(false);
+        }
+    }
 }
