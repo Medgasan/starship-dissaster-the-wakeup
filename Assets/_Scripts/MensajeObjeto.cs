@@ -7,38 +7,55 @@ public class MensajeObjeto : MonoBehaviour
     public float distanciaMaxima = 3.5f;
 
     private Camera camaraPrincipal;
+    private bool estaInteractuando = false;
 
     void Start()
     {
-        // El script busca automáticamente la cámara del jugador al empezar
         camaraPrincipal = Camera.main;
-
         if (mensajeUI != null) mensajeUI.SetActive(false);
     }
 
     void Update()
     {
-        // 1. Trazamos una línea matemática desde la cámara hacia el frente
+        // 1. Si el jugador ya ha pulsado la E y está en el minijuego/abriendo, forzamos el apagado
+        if (estaInteractuando)
+        {
+            if (mensajeUI != null) mensajeUI.SetActive(false);
+            return;
+        }
+
+        // 2. Trazamos el rayo para saber si el jugador nos está mirando
         Ray rayo = new Ray(camaraPrincipal.transform.position, camaraPrincipal.transform.forward);
         RaycastHit hit;
 
-        // 2. Comprobamos si esa línea choca con algo físico
         if (Physics.Raycast(rayo, out hit, distanciaMaxima))
         {
-            // 3. ¿El objeto contra el que ha chocado soy YO (este mismo objeto)?
             if (hit.collider.gameObject == gameObject)
             {
-                // ¡Me están mirando! Enciendo el texto
+                // ¡Nos están mirando! Encendemos el texto
                 if (mensajeUI != null) mensajeUI.SetActive(true);
-                return; // Cortamos aquí para que no llegue al código de apagar
+
+                // 3. DETECTAR INTERACCIÓN: Si nos miran y pulsan la 'E'
+                if (Input.GetKeyDown(KeyCode.E))
+                {
+                    estaInteractuando = true; // Bloqueamos el script
+                    if (mensajeUI != null) mensajeUI.SetActive(false); // Apagamos el cartel de inmediato
+                }
+
+                return;
             }
         }
 
-        // Si la línea no choca con nada, o choca con la pared/otro objeto, me apago
+        // Si dejamos de mirarlo, nos aseguramos de limpiar el estado
         if (mensajeUI != null) mensajeUI.SetActive(false);
     }
 
-    // Mantenemos esto para evitar el bug fantasma al destruir llaves
+    // Esta función sirve para volver a "activar" el cartel si el jugador sale del minijuego sin resolverlo (opcional)
+    public void ResetearInteraccion()
+    {
+        estaInteractuando = false;
+    }
+
     private void OnDestroy()
     {
         if (mensajeUI != null) mensajeUI.SetActive(false);
