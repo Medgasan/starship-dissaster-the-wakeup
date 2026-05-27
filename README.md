@@ -51,5 +51,3 @@ Confirma los cambios: git commit -m "feat: descripción"
 Sube los cambios y abre una Pull Request.
 
 
-Licencia
-Especifica aquí tu licencia (p. ej., MIT, Todos los derechos reservados).
