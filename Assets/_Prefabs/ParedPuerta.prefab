@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 4239194653330075612}
   - component: {fileID: 1835154565779884712}
   - component: {fileID: 6799542226405118009}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: ParedPuerta
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -625,9 +625,25 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 4466970609089968215}
     m_Modifications:
+    - target: {fileID: 406408056284819455, guid: b796ee96c13758c4287413dea763b709, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 2147115828039695382, guid: b796ee96c13758c4287413dea763b709, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
     - target: {fileID: 3754634029019127020, guid: b796ee96c13758c4287413dea763b709, type: 3}
       propertyPath: m_Name
       value: Puerta
+      objectReference: {fileID: 0}
+    - target: {fileID: 3754634029019127020, guid: b796ee96c13758c4287413dea763b709, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 4795370268320137208, guid: b796ee96c13758c4287413dea763b709, type: 3}
+      propertyPath: m_Layer
+      value: 6
       objectReference: {fileID: 0}
     - target: {fileID: 6494686632569879825, guid: b796ee96c13758c4287413dea763b709, type: 3}
       propertyPath: m_LocalPosition.x
