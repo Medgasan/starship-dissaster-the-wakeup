@@ -2,6 +2,9 @@ Starship Disaster: The Wakeup
 
 Juego de exploración y supervivencia en 3D construido con Unity 6. Despiertas solo a bordo de una nave espacial dañada — descubre qué ocurrió.
 
+Mostrar imagen
+Mostrar imagen
+Mostrar imagen
 
 Descripción
 Starship Disaster: The Wakeup es el primer capítulo de un juego sci-fi en primera/tercera persona. El jugador despierta a bordo de una nave espacial destruida y debe recorrerla interactuando con terminales y puertas para descubrir el desastre ocurrido.
@@ -49,5 +52,3 @@ Contribuir
 Haz un fork del repositorio y crea una rama: git checkout -b feature/tu-funcionalidad
 Confirma los cambios: git commit -m "feat: descripción"
 Sube los cambios y abre una Pull Request.
-
-
