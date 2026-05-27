@@ -29,7 +29,6 @@ public class AudioOclusionManager : MonoBehaviour
 
             if (Physics.Linecast(src.transform.position, listener.position, wallMask))
             {
-                Debug.Log(src.ToString());
                 obstruido = true;
                 break;
             }

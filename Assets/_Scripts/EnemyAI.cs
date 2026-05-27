@@ -28,9 +28,7 @@ public class EnemyAI : MonoBehaviour
     void Start()
     {
         agent = GetComponent<NavMeshAgent>();
-
         startPosition = transform.position;
-
         // Buscar layer "Puerta"
         doorLayer = LayerMask.GetMask("Puerta");
 
