@@ -1,8 +1,13 @@
+using GLTFast.Schema;
 using UnityEngine;
 using UnityEngine.AI;
 
+
+
 public class EnemyAI : MonoBehaviour
 {
+    private Animator animator;
+
     [Header("Jugador")]
     public Transform player;
 
@@ -28,6 +33,7 @@ public class EnemyAI : MonoBehaviour
     void Start()
     {
         agent = GetComponent<NavMeshAgent>();
+        animator = GetComponent<Animator>();
         startPosition = transform.position;
         // Buscar layer "Puerta"
         doorLayer = LayerMask.GetMask("Puerta");
@@ -50,6 +56,7 @@ public class EnemyAI : MonoBehaviour
         {
             chasing = false;
         }
+        animator.SetBool("Chasing", chasing);
 
         // Revisar puertas
         CheckDoor();
