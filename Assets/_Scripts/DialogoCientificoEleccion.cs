@@ -24,9 +24,13 @@ public class DialogoCientificoEleccion : MonoBehaviour
     [TextArea(2, 4)] public string[] frasesNormales;
     [TextArea(2, 4)] public string[] frasesConAntidoto;
 
-    [Header("2. Diálogos Post-Decisión")]
+    [Header("2. Diálogos Post-Decisión (Este NPC)")]
     [TextArea(2, 4)] public string[] frasesSiLoCuras;
     [TextArea(2, 4)] public string[] frasesSiLoNiegas;
+
+    [Header("3. Consecuencias (El otro NPC)")]
+    [Tooltip("Frases si llegas aquí pero ya le diste el antídoto al OTRO científico")]
+    [TextArea(2, 4)] public string[] frasesAntidotoGastado;
 
     [Header("Configuración General")]
     public KeyCode teclaInteraccion = KeyCode.E;
@@ -43,14 +47,12 @@ public class DialogoCientificoEleccion : MonoBehaviour
     private Coroutine rutinaEscritura;
     private CanInteract inventarioDelJugador;
 
-    private bool leyendoListaAntidoto = false;
+    // 0 = Normal, 1 = Tiene Antídoto, 2 = Ya lo gastó
+    private int estadoInventarioAnterior = 0;
 
-    // Control de la decisión
     private bool esperandoEleccion = false;
     private bool decisionTomada = false;
     private bool seLlevoElAntidoto = false;
-
-    // Escudo contra el Doble Trigger
     private bool yaEstamosHablando = false;
 
     void Start()
@@ -65,26 +67,15 @@ public class DialogoCientificoEleccion : MonoBehaviour
 
         if (esperandoEleccion)
         {
-            if (Input.GetKeyDown(KeyCode.Alpha1))
-            {
-                ProcesarDecision(true);
-            }
-            else if (Input.GetKeyDown(KeyCode.Alpha2))
-            {
-                ProcesarDecision(false);
-            }
+            if (Input.GetKeyDown(KeyCode.Alpha1)) ProcesarDecision(true);
+            else if (Input.GetKeyDown(KeyCode.Alpha2)) ProcesarDecision(false);
             return;
         }
 
         if (Input.GetKeyDown(teclaInteraccion))
         {
-            if (!textoFlotante.gameObject.activeSelf)
-            {
-                textoFlotante.gameObject.SetActive(true);
-            }
-
-            bool tieneAntidoto = inventarioDelJugador != null && inventarioDelJugador.objetosRecogidos.Contains(objetoNecesario);
-            AvanzarDialogo(tieneAntidoto);
+            if (!textoFlotante.gameObject.activeSelf) textoFlotante.gameObject.SetActive(true);
+            AvanzarDialogo();
         }
     }
 
@@ -92,18 +83,18 @@ public class DialogoCientificoEleccion : MonoBehaviour
     {
         if (other.CompareTag("Player"))
         {
-            // ESCUDO ANTI-BUGS: Si ya entró un collider del jugador, ignoramos el resto
             if (yaEstamosHablando) return;
             yaEstamosHablando = true;
 
             jugadorCerca = true;
             inventarioDelJugador = other.GetComponentInChildren<CanInteract>();
 
-            bool tieneAntidoto = inventarioDelJugador != null && inventarioDelJugador.objetosRecogidos.Contains(objetoNecesario);
+            int estadoActual = ComprobarEstadoInventario();
 
-            if (!decisionTomada && tieneAntidoto != leyendoListaAntidoto)
+            // Si el estado del inventario ha cambiado mientras estábamos fuera, reiniciamos la charla
+            if (!decisionTomada && estadoActual != estadoInventarioAnterior)
             {
-                leyendoListaAntidoto = tieneAntidoto;
+                estadoInventarioAnterior = estadoActual;
                 fraseActual = 0;
             }
 
@@ -125,7 +116,7 @@ public class DialogoCientificoEleccion : MonoBehaviour
     {
         if (other.CompareTag("Player"))
         {
-            yaEstamosHablando = false; // Reiniciamos el escudo al salir
+            yaEstamosHablando = false;
             jugadorCerca = false;
             inventarioDelJugador = null;
             textoFlotante.gameObject.SetActive(false);
@@ -135,11 +126,22 @@ public class DialogoCientificoEleccion : MonoBehaviour
         }
     }
 
-    void AvanzarDialogo(bool tieneAntidoto)
+    // MAGIA: Comprobamos si tiene el objeto, o si tiene la marca de haberlo gastado
+    int ComprobarEstadoInventario()
     {
-        if (!decisionTomada && tieneAntidoto != leyendoListaAntidoto)
+        if (inventarioDelJugador == null) return 0;
+        if (inventarioDelJugador.objetosRecogidos.Contains(objetoNecesario)) return 1;
+        if (inventarioDelJugador.objetosRecogidos.Contains(objetoNecesario + "_Usado")) return 2;
+        return 0;
+    }
+
+    void AvanzarDialogo()
+    {
+        int estadoActual = ComprobarEstadoInventario();
+
+        if (!decisionTomada && estadoActual != estadoInventarioAnterior)
         {
-            leyendoListaAntidoto = tieneAntidoto;
+            estadoInventarioAnterior = estadoActual;
             fraseActual = 0;
         }
 
@@ -147,7 +149,8 @@ public class DialogoCientificoEleccion : MonoBehaviour
 
         if (fraseActual >= listaActual.Length)
         {
-            if (!decisionTomada && leyendoListaAntidoto)
+            // Solo lanzamos la elección si tiene el antídoto activo (estado 1)
+            if (!decisionTomada && estadoActual == 1)
             {
                 IniciarEleccion();
                 return;
@@ -166,18 +169,23 @@ public class DialogoCientificoEleccion : MonoBehaviour
 
     string[] ObtenerListaCorrecta()
     {
+        // Si ya tomaste la decisión con este científico en particular
         if (decisionTomada)
         {
             return seLlevoElAntidoto ? frasesSiLoCuras : frasesSiLoNiegas;
         }
 
-        return leyendoListaAntidoto ? frasesConAntidoto : frasesNormales;
+        // Si no has decidido nada aquí, comprobamos qué traes en los bolsillos
+        int estadoActual = ComprobarEstadoInventario();
+        if (estadoActual == 1) return frasesConAntidoto;
+        if (estadoActual == 2) return frasesAntidotoGastado;
+
+        return frasesNormales;
     }
 
     void IniciarEleccion()
     {
         esperandoEleccion = true;
-
         if (panelEleccionUI != null) panelEleccionUI.SetActive(true);
         alBloquearControles?.Invoke();
     }
@@ -194,7 +202,10 @@ public class DialogoCientificoEleccion : MonoBehaviour
 
         if (darAntidoto)
         {
+            // Le quitamos el antídoto normal y le damos la marca secreta
             inventarioDelJugador.objetosRecogidos.Remove(objetoNecesario);
+            inventarioDelJugador.objetosRecogidos.Add(objetoNecesario + "_Usado");
+
             if (!string.IsNullOrEmpty(objetoRecompensa) && !inventarioDelJugador.objetosRecogidos.Contains(objetoRecompensa))
             {
                 inventarioDelJugador.objetosRecogidos.Add(objetoRecompensa);
@@ -203,7 +214,7 @@ public class DialogoCientificoEleccion : MonoBehaviour
             alCurarActualizarFinal?.Invoke();
         }
 
-        AvanzarDialogo(inventarioDelJugador.objetosRecogidos.Contains(objetoNecesario));
+        AvanzarDialogo();
     }
 
     void MostrarFrase(string frase)
@@ -214,22 +225,17 @@ public class DialogoCientificoEleccion : MonoBehaviour
 
     IEnumerator EscribirTextoLetraALetra(string frase)
     {
-        // 1. Ponemos la frase entera de golpe, pero la hacemos invisible
         textoFlotante.text = frase;
-        textoFlotante.maxVisibleCharacters = 0; // REINICIO: Esto arregla el bug de los 9 caracteres
-
-        // Forzamos a Unity a procesar la longitud real de la frase
+        textoFlotante.maxVisibleCharacters = 0;
         textoFlotante.ForceMeshUpdate();
         int totalLetrasVisibles = textoFlotante.textInfo.characterCount;
 
         float tonoOriginal = altavozVoz != null ? altavozVoz.pitch : 1f;
 
-        // 2. Vamos revelando las letras una a una mágicamente
         for (int i = 0; i <= totalLetrasVisibles; i++)
         {
             textoFlotante.maxVisibleCharacters = i;
 
-            // Sonido intermitente (en letras pares)
             if (i > 0 && i % 2 == 0 && altavozVoz != null && sonidoVoz != null)
             {
                 altavozVoz.pitch = Random.Range(0.8f, 1.2f);
@@ -239,10 +245,7 @@ public class DialogoCientificoEleccion : MonoBehaviour
             yield return new WaitForSeconds(velocidadTexto);
         }
 
-        // 3. Restauramos la voz al terminar
         if (altavozVoz != null) altavozVoz.pitch = tonoOriginal;
-
-        // Seguro extra por si acaso: al terminar, que se vea todo
         textoFlotante.maxVisibleCharacters = 99999;
     }
 }

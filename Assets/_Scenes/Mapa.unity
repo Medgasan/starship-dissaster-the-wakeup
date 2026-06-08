@@ -7363,9 +7363,6 @@ PrefabInstance:
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: d16d676d5f5e5e447bc77314508e8a84, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 459245182}
-    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: d16d676d5f5e5e447bc77314508e8a84, type: 3}
-      insertIndex: -1
       addedObject: {fileID: 459245185}
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: d16d676d5f5e5e447bc77314508e8a84, type: 3}
       insertIndex: -1
@@ -7373,34 +7370,15 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: d16d676d5f5e5e447bc77314508e8a84, type: 3}
       insertIndex: -1
       addedObject: {fileID: 459245187}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: d16d676d5f5e5e447bc77314508e8a84, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 459245190}
   m_SourcePrefab: {fileID: 100100000, guid: d16d676d5f5e5e447bc77314508e8a84, type: 3}
 --- !u!1 &459245181 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: d16d676d5f5e5e447bc77314508e8a84, type: 3}
   m_PrefabInstance: {fileID: 459245180}
   m_PrefabAsset: {fileID: 0}
---- !u!64 &459245182
-MeshCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 459245181}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 1
-  m_Enabled: 1
-  serializedVersion: 5
-  m_Convex: 0
-  m_CookingOptions: 30
-  m_Mesh: {fileID: 0}
 --- !u!4 &459245184 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: d16d676d5f5e5e447bc77314508e8a84, type: 3}
@@ -7564,6 +7542,11 @@ MonoBehaviour:
   - Ya es demasiado tarde.
   - "Adem\xE1s ya soy viejo y seria un desperdicio."
   - Mucha surte.
+  frasesAntidotoGastado:
+  - Vaya veo que ya lo has gastado.
+  - "No sab\xEDa que hab\xEDa alguien m\xE1s aqu\xED."
+  - Espero sobrevivais.
+  - Mucha suerte.
   teclaInteraccion: 101
   velocidadTexto: 0.05
   frasesRepetiblesAlFinal: 1
@@ -7576,6 +7559,29 @@ MonoBehaviour:
   alCurarActualizarFinal:
     m_PersistentCalls:
       m_Calls: []
+--- !u!136 &459245190
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 459245181}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 0.67530966
+  m_Height: 3.448987
+  m_Direction: 1
+  m_Center: {x: -0.17530987, y: 1.2244934, z: -2.897001e-17}
 --- !u!43 &494544496
 Mesh:
   m_ObjectHideFlags: 0
@@ -21329,6 +21335,7 @@ MonoBehaviour:
   - Sabia que eras un monstruo.
   - "ME EST\xC1S CONDENANDO A MORIR."
   - Vete antes de que recupere el aliento y vaya por ti.
+  frasesAntidotoGastado: []
   teclaInteraccion: 101
   velocidadTexto: 0.05
   frasesRepetiblesAlFinal: 3
