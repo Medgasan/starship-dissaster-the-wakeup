@@ -1,23 +1,10 @@
-using GLTFast.Schema;
 using UnityEngine;
 using UnityEngine.AI;
-using UnityEngine.SceneManagement;
-
-
 
 public class EnemyAI : MonoBehaviour
 {
-    private Animator animator;
-
     [Header("Jugador")]
     public Transform player;
-
-    [Header("Ataque")]
-    public float attackRange = 2f;
-    public float attackCooldown = 1.5f;
-
-    private bool attacking = false;
-    private float attackTimer = 0f;
 
     [Header("Movimiento libre")]
     public float roamRadius = 20f;
@@ -41,7 +28,6 @@ public class EnemyAI : MonoBehaviour
     void Start()
     {
         agent = GetComponent<NavMeshAgent>();
-        animator = GetComponent<Animator>();
         startPosition = transform.position;
         // Buscar layer "Puerta"
         doorLayer = LayerMask.GetMask("Puerta");
@@ -64,69 +50,23 @@ public class EnemyAI : MonoBehaviour
         {
             chasing = false;
         }
-        animator.SetBool("Chasing", chasing);
 
         // Revisar puertas
         CheckDoor();
 
-        attackTimer -= Time.deltaTime;
-
+        // Estados
         if (chasing)
         {
-            if (distanceToPlayer <= attackRange)
-            {
-                AttackPlayer();
-            }
-            else
-            {
-                
-                ChasePlayer();
-            }
+            ChasePlayer();
         }
         else
         {
-            
             Roam();
-        }
-    }
-
-    void AttackPlayer()
-    {
-        agent.isStopped = true;
-
-        transform.LookAt(new Vector3(
-            player.position.x,
-            transform.position.y,
-            player.position.z));
-
-        if (attackTimer <= 0)
-        {
-            animator.SetTrigger("Attack");
-
-            attackTimer = attackCooldown;
-        }
-    }
-
-    public void HitPlayer()
-    {
-        float distance =
-            Vector3.Distance(transform.position, player.position);
-
-        if (distance <= attackRange)
-        {
-            PlayerHealth health =
-            player.GetComponent<PlayerHealth>();
-
-            if (health != null)
-            {
-                health.Die();
-            }
         }
     }
 
     void ChasePlayer()
     {
-        agent.isStopped = false;
         agent.destination = player.position;
     }
 
@@ -198,10 +138,6 @@ public class EnemyAI : MonoBehaviour
         // Movimiento libre
         Gizmos.color = Color.green;
         Gizmos.DrawWireSphere(transform.position, roamRadius);
-
-        // Ataque
-        Gizmos.color = Color.magenta;
-        Gizmos.DrawWireSphere(transform.position, attackRange);
 
         // Raycast puertas
         Gizmos.color = Color.blue;
