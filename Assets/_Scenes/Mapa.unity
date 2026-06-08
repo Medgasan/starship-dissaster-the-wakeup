@@ -9385,8 +9385,8 @@ MonoBehaviour:
   attackCooldown: 1.5
   roamRadius: 10
   roamDelay: 7.5
-  detectionRange: 3
-  loseRange: 5
+  detectionRange: 5
+  loseRange: 6.5
   doorCheckDistance: 5
   doorLayer:
     serializedVersion: 2
