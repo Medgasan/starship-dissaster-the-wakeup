@@ -37,9 +37,10 @@
 ```
 Assets/
 ├── _Scenes/
-│   ├── SampleScene.unity   # Bootstrap / menú principal
-│   ├── Mapa.unity          # Nivel principal de juego
-│   └── Victoria.unity      # Secuencia de victoria / final
+│   ├── Level.unity           # Vertical Slice, carga el resto de capas -> nivel jugable con todos los componentes.
+|   |── LevelAmbient.unity    # Capa de sonidos y ambiente del juego
+│   ├── Mapa.unity            # Capa del nivel, objetos e interacción
+│   └── Victoria.unity        # Secuencia de victoria / final
 Packages/
 └── manifest.json
 ProjectSettings/
@@ -49,7 +50,7 @@ ProjectSettings/
 
 | Escena | Propósito |
 |---|---|
-| `SampleScene` | Punto de entrada |
+| `Level` | Punto de entrada |
 | `Mapa` | Mapa principal de juego |
 | `Victoria` | Secuencia de victoria / final |
 
@@ -69,6 +70,24 @@ ProjectSettings/
 - [Unity Hub](https://unity.com/download)
 - Unity Editor **6000.3.14f1**
 
+
+## Requisitos previos al clonar
+
+Este repositorio usa **Git LFS**. Instala [Git LFS](https://git-lfs.com) antes de clonar.
+
+### Windows (PowerShell)
+```powershell
+$env:GIT_CLONE_PROTECTION_ACTIVE=false
+git clone 
+```
+
+### Mac / Linux
+```bash
+GIT_CLONE_PROTECTION_ACTIVE=false git clone 
+```
+
+
+
 ### Configuración
 
 ```bash
@@ -77,7 +96,7 @@ git clone https://github.com/<tu-usuario>/starship-disaster-the-wakeup.git
 
 1. Abre **Unity Hub** → **Abrir proyecto** → selecciona la carpeta clonada.
 2. Unity resolverá los paquetes automáticamente mediante el Package Manager.
-3. Abre `Assets/_Scenes/SampleScene.unity` y pulsa **Play**.
+3. Abre `Assets/_Scenes/Level.unity` y pulsa **Play**.
 
 > ⚠️ Abrir con una versión distinta de Unity puede provocar advertencias de serialización.
 
@@ -88,14 +107,6 @@ git clone https://github.com/<tu-usuario>/starship-disaster-the-wakeup.git
 `File → Build Settings` → selecciona la plataforma objetivo → **Build**.
 
 Resolución por defecto: **1024 × 768**.
-
----
-
-## Contribuir
-
-1. Haz un fork del repositorio y crea una rama: `git checkout -b feature/tu-funcionalidad`
-2. Confirma los cambios: `git commit -m "feat: descripción"`
-3. Sube los cambios y abre una Pull Request.
 
 ---
 
